@@ -21,20 +21,61 @@ public class GPXReader {
             Document gpxDocument = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(gpxXmlFile);
             gpxDocument.getDocumentElement().normalize();
 
-            NodeList nodeListMetadata = gpxDocument.getElementsByTagName("metadata");
-            Node nodeMetadata = nodeListMetadata.item(0);
-            if (nodeMetadata.getNodeType() == Node.ELEMENT_NODE) {
-                Element elementMetadata = (Element) nodeMetadata;
-
-                String gpxFileTime = elementMetadata.getElementsByTagName("time").item(0).getTextContent();
-
-                gpxFile.setTime(Instant.parse(gpxFileTime));
-            }
+            String time = readTime(gpxDocument);
+            if (time != null) gpxFile.setTime(Instant.parse(time));
 
             return gpxFile;
+            
         } catch (Exception e) {
             e.printStackTrace();
             throw new MalformedParametersException("Can't open the file " + gpxFileLocation);
         }
     }
+
+    private static String readTime(Document gpxDocument) {
+        String gpxFileTime = tryToReadTimeFromMetadata(gpxDocument);
+
+        if (gpxFileTime == null) {
+            gpxFileTime = tryToReadTimeFromTrack(gpxDocument);
+        }
+
+        return gpxFileTime;
+    }
+
+    private static String tryToReadTimeFromMetadata(Document gpxDocument) {
+        NodeList nodeListMetadata = gpxDocument.getElementsByTagName("metadata");
+        if (nodeListMetadata.getLength() > 0) {
+            Node nodeMetadata = nodeListMetadata.item(0);
+
+            NodeList nodeListMetadataTime = ((Element) nodeMetadata).getElementsByTagName("time");
+            if (nodeListMetadataTime.getLength() > 0) {
+                return nodeListMetadataTime.item(0).getTextContent();
+            }
+        }
+        return null;
+    }
+
+    private static String tryToReadTimeFromTrack(Document gpxDocument) {
+        NodeList nodeListTracks = gpxDocument.getElementsByTagName("trk");
+        if (nodeListTracks.getLength() > 0) {
+            Node nodeTrack = nodeListTracks.item(0);
+
+            NodeList nodeListTrackSegments = ((Element) nodeTrack).getElementsByTagName("trkseg");
+            if (nodeListTrackSegments.getLength() > 0) {
+                Node nodeTrackSegment = nodeListTrackSegments.item(0);
+
+                NodeList nodeListTrackPoints = ((Element) nodeTrackSegment).getElementsByTagName("trkpt");
+                if (nodeListTrackPoints.getLength() > 0) {
+                    Node firstNodeTrackPoint = nodeListTrackPoints.item(0);
+
+                    NodeList nodeListTrackPointTimes = ((Element) firstNodeTrackPoint).getElementsByTagName("time");
+                    if (nodeListTrackPointTimes != null && nodeListTrackPointTimes.getLength() != 0) {
+                        return nodeListTrackPointTimes.item(0).getTextContent();
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
 }
