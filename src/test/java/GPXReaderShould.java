@@ -51,4 +51,26 @@ public class GPXReaderShould {
         // assert
         Assert.assertNull(gpxFile.dateTime());
     }
+
+    @Test
+    public void readTrack() {
+        // arrange
+        // act
+        GPXFile gpxFile = GPXReader.read("src/test/resources/simple-track.gpx");
+
+        // assert
+        Assert.assertEquals(3, gpxFile.numberOfTrackPoints());
+    }
+
+    @Test
+    public void readTrackBigFile() {
+        // arrange
+        // act
+        GPXFile gpxFile = GPXReader.read("src/test/resources/combe-emay.gpx");
+
+        // assert
+        Assert.assertEquals(4499, gpxFile.numberOfTrackPoints());
+    }
+
+
 }

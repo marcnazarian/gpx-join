@@ -9,6 +9,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.File;
 import java.lang.reflect.MalformedParametersException;
 import java.time.Instant;
+import java.util.List;
 
 public class GPXReader {
 
@@ -23,6 +24,8 @@ public class GPXReader {
 
             String time = readTime(gpxDocument);
             if (time != null) gpxFile.setTime(Instant.parse(time));
+
+            gpxFile.setTrackPoints(readTrackPoints(gpxDocument));
 
             return gpxFile;
             
@@ -78,4 +81,18 @@ public class GPXReader {
         return null;
     }
 
+    private static NodeList readTrackPoints(Document gpxDocument) {
+        NodeList nodeListTracks = gpxDocument.getElementsByTagName("trk");
+        if (nodeListTracks.getLength() > 0) {
+            Node nodeTrack = nodeListTracks.item(0);
+
+            NodeList nodeListTrackSegments = ((Element) nodeTrack).getElementsByTagName("trkseg");
+            if (nodeListTrackSegments.getLength() > 0) {
+                Node nodeTrackSegment = nodeListTrackSegments.item(0);
+
+                return ((Element) nodeTrackSegment).getElementsByTagName("trkpt");
+            }
+        }
+        return null;
+    }
 }
