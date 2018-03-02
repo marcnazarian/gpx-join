@@ -4,7 +4,7 @@
   <time>2018-02-02T08:54:46Z</time>
  </metadata>
  <trk>
-  <name>Morning activity</name>
+  <name>Activité matinale 1</name>
   <trkseg>
    <trkpt lat="44.9726580" lon="5.8252400">
     <ele>1489.0</ele>
@@ -20,16 +20,6 @@
     <time>2018-02-02T08:54:49Z</time>
     <extensions>
      <gpxtpx:TrackPointExtension>
-      <gpxtpx:cad>58</gpxtpx:cad>
-     </gpxtpx:TrackPointExtension>
-    </extensions>
-   </trkpt>
-   <trkpt lat="44.9726230" lon="5.8252840">
-    <ele>1489.0</ele>
-    <time>2018-02-02T08:54:51Z</time>
-    <extensions>
-     <gpxtpx:TrackPointExtension>
-      <gpxtpx:atemp>23</gpxtpx:atemp>
       <gpxtpx:cad>58</gpxtpx:cad>
      </gpxtpx:TrackPointExtension>
     </extensions>

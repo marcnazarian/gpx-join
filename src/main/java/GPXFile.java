@@ -8,6 +8,7 @@ public class GPXFile {
 
     private Instant time;
     private NodeList trackPoints;
+    private String trackName;
 
     public Instant dateTime() {
         return time;
@@ -23,5 +24,13 @@ public class GPXFile {
 
     public void setTrackPoints(NodeList trackPoints) {
         this.trackPoints = trackPoints;
+    }
+
+    public String trackName() {
+        return trackName;
+    }
+
+    public void setTrackName(String trackName) {
+        this.trackName = trackName;
     }
 }
