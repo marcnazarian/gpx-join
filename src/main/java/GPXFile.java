@@ -22,6 +22,10 @@ public class GPXFile {
         return trackPoints.getLength();
     }
 
+    public NodeList trackPoints() {
+        return trackPoints;
+    }
+
     public void setTrackPoints(NodeList trackPoints) {
         this.trackPoints = trackPoints;
     }
@@ -33,4 +37,5 @@ public class GPXFile {
     public void setTrackName(String trackName) {
         this.trackName = trackName;
     }
+
 }
