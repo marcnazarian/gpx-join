@@ -1,150 +1,215 @@
 package test.java;
 
-import main.java.GPXFile;
+import main.java.GPX;
+import main.java.GPXJoiner;
 import main.java.GPXReader;
-import org.junit.Assert;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.UnmarshalException;
 import java.time.Instant;
 
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.CoreMatchers.*;
 
 public class GPXReaderShould {
 
+    @Rule
+    public ExpectedException thrown = ExpectedException.none();
+
     @Test
-    public void readDateFromMetadataGPXFile() {
+    public void readGPXFile() {
         // arrange
+        Instant expectedTime = Instant.parse("2018-02-13T08:18:33Z");
+
         // act
-        GPXFile gpxFile = GPXReader.read("src/test/resources/simple-track.gpx");
+        GPX gpx = GPXReader.read("src/test/resources/combe-emay.gpx");
 
         // assert
-        Instant expectedInstant = Instant.parse("2018-02-02T08:54:46Z");
-        Assert.assertEquals(expectedInstant, gpxFile.dateTime());
+        assertNotNull(gpx);
+        assertThat(gpx.trackName(), is("Combe de l'Emay, en aller retour"));
+        assertThat(gpx.time(), is(expectedTime));
+        assertThat(gpx.numberOfTrackPoints(), is(4499));
     }
 
     @Test
-    public void readDateFromGPXFileWhenNoMetadata() {
+    public void readEmptyGPXFile() {
         // arrange
+
         // act
-        GPXFile gpxFile = GPXReader.read("src/test/resources/simple-track-without-metadata.gpx");
+        GPX gpx = GPXReader.read("src/test/resources/empty-track.gpx");
 
         // assert
-        Instant expectedInstant = Instant.parse("2018-02-02T08:54:49Z");
-        Assert.assertEquals(expectedInstant, gpxFile.dateTime());
+        assertNotNull(gpx);
+        assertThat(gpx.trackName(), nullValue());
+        assertThat(gpx.time(), nullValue());
+        assertThat(gpx.numberOfTrackPoints(), is(0));
     }
 
     @Test
-    public void readDateFromGPXFileWhenNoMetadataTime() {
+    public void readTimeFromFirstTrackPointIfNoTimeInMetadata() {
         // arrange
+        Instant expectedTime = Instant.parse("2018-02-02T08:54:47Z");
+
         // act
-        GPXFile gpxFile = GPXReader.read("src/test/resources/simple-track-without-metadata-time.gpx");
+        GPX gpx = GPXReader.read("src/test/resources/simple-track-without-metadata-time.gpx");
 
         // assert
-        Instant expectedInstant = Instant.parse("2018-02-02T08:54:47Z");
-        Assert.assertEquals(expectedInstant, gpxFile.dateTime());
+        assertNotNull(gpx);
+        assertThat(gpx.time(), is(expectedTime));
     }
 
     @Test
-    public void returnNullIfTimeCantBeFound() {
+    public void readFirstTrackPoint() {
         // arrange
         // act
-        GPXFile gpxFile = GPXReader.read("src/test/resources/empty-track.gpx");
+        GPX gpx = GPXReader.read("src/test/resources/combe-emay.gpx");
 
         // assert
-        Assert.assertNull(gpxFile.dateTime());
+        assertNotNull(gpx);
+        assertThat(gpx.firstTrackPoint().getTime().toString(), is("2018-02-13T08:18:33Z"));
+        assertThat(gpx.firstTrackPoint().getEle().doubleValue(), is(1121.4));
     }
 
     @Test
-    public void readTrackName() {
+    public void readLastTrackPoint() {
         // arrange
         // act
-        GPXFile gpxFile = GPXReader.read("src/test/resources/simple-track.gpx");
+        GPX gpx = GPXReader.read("src/test/resources/combe-emay.gpx");
 
         // assert
-        Assert.assertEquals("Morning activity", gpxFile.trackName());
-    }
-
-    @Test
-    public void returnEmptyStringIfNoNameFound() {
-        // arrange
-        // act
-        GPXFile gpxFile = GPXReader.read("src/test/resources/empty-track.gpx");
-
-        // assert
-        Assert.assertEquals("", gpxFile.trackName());
-    }
-
-    @Test
-    public void readTrack() {
-        // arrange
-        // act
-        GPXFile gpxFile = GPXReader.read("src/test/resources/simple-track.gpx");
-
-        // assert
-        Assert.assertEquals(3, gpxFile.numberOfTrackPoints());
-    }
-
-    @Test
-    public void readTrackBigFile() {
-        // arrange
-        // act
-        GPXFile gpxFile = GPXReader.read("src/test/resources/combe-emay.gpx");
-
-        // assert
-        Assert.assertEquals(4499, gpxFile.numberOfTrackPoints());
+        assertNotNull(gpx);
+        assertThat(gpx.lastTrackPoint().getTime().toString(), is("2018-02-13T15:20:36Z"));
+        assertThat(gpx.lastTrackPoint().getEle().doubleValue(), is(1148.0));
     }
 
     @Test
     public void combineTwoSimpleGPSFiles() {
         // arrange
-        GPXFile gpxFile1 = GPXReader.read("src/test/resources/simple-track-split-1.gpx");
-        Instant timeOfTrack1 = gpxFile1.dateTime();
-        String nameOfTrack1 = gpxFile1.trackName();
-        int numberOfTrackPointsOfFile1 = gpxFile1.numberOfTrackPoints();
+        GPX gpx1 = GPXReader.read("src/test/resources/simple-track-split-1.gpx");
+        assertNotNull(gpx1);
+        Instant timeOfTrack1 = gpx1.time();
+        String nameOfTrack1 = gpx1.trackName();
+        int numberOfTrackPointsOfFile1 = gpx1.numberOfTrackPoints();
 
-        GPXFile gpxFile2 = GPXReader.read("src/test/resources/simple-track-split-2.gpx");
-        Instant timeOfTrack2 = gpxFile2.dateTime();
-        int numberOfTrackPointsOfFile2 = gpxFile2.numberOfTrackPoints();
+        GPX gpx2 = GPXReader.read("src/test/resources/simple-track-split-2.gpx");
+        assertNotNull(gpx2);
+        Instant timeOfTrack2 = gpx2.time();
+        int numberOfTrackPointsOfFile2 = gpx2.numberOfTrackPoints();
 
         // act
         try {
-            GPXFile gpxFileCombined = GPXReader.combine("src/test/resources/simple-track-split-1.gpx", "src/test/resources/simple-track-split-2.gpx");
+            GPX gpxFileCombined = GPXJoiner.combine(gpx1, gpx2);
 
             // assert
-            Assert.assertEquals(timeOfTrack1, gpxFileCombined.dateTime());
-            Assert.assertNotEquals(timeOfTrack2, gpxFileCombined.dateTime());
+            assertNotNull(gpxFileCombined);
+            assertThat(gpxFileCombined.time(), is(timeOfTrack1));
+            assertThat(gpxFileCombined.time(), not(timeOfTrack2));
 
-            Assert.assertEquals(nameOfTrack1, gpxFileCombined.trackName());
+            assertThat(gpxFileCombined.trackName(), is(nameOfTrack1));
 
-            Assert.assertEquals(numberOfTrackPointsOfFile1 + numberOfTrackPointsOfFile2, gpxFileCombined.numberOfTrackPoints());
+            assertThat(gpxFileCombined.numberOfTrackPoints(), is(numberOfTrackPointsOfFile1 + numberOfTrackPointsOfFile2));
+
+            assertThat(gpxFileCombined.firstTrackPoint(), is(gpx1.firstTrackPoint()));
+            assertThat(gpxFileCombined.lastTrackPoint(), is(gpx2.lastTrackPoint()));
         } catch (Exception e) {
             fail("Unable to combine files.");
         }
     }
 
     @Test
-    public void combineTwoGPSFiles() {
+    public void combineTwoBigGPSFiles() {
         // arrange
-        GPXFile gpxFile1 = GPXReader.read("src/test/resources/file1.gpx");
-        Instant timeOfTrack1 = gpxFile1.dateTime();
-        String nameOfTrack1 = gpxFile1.trackName();
-        int numberOfTrackPointsOfFile1 = gpxFile1.numberOfTrackPoints();
+        GPX gpx1 = GPXReader.read("src/test/resources/file1.gpx");
+        assertNotNull(gpx1);
+        Instant timeOfTrack1 = gpx1.time();
+        String nameOfTrack1 = gpx1.trackName();
+        int numberOfTrackPointsOfFile1 = gpx1.numberOfTrackPoints();
 
-        GPXFile gpxFile2 = GPXReader.read("src/test/resources/file2.gpx");
-        Instant timeOfTrack2 = gpxFile2.dateTime();
-        int numberOfTrackPointsOfFile2 = gpxFile2.numberOfTrackPoints();
+        GPX gpx2 = GPXReader.read("src/test/resources/file2.gpx");
+        assertNotNull(gpx2);
+        Instant timeOfTrack2 = gpx2.time();
+        int numberOfTrackPointsOfFile2 = gpx2.numberOfTrackPoints();
 
         // act
         try {
-            GPXFile gpxFileCombined = GPXReader.combine("src/test/resources/file1.gpx", "src/test/resources/file2.gpx");
+            GPX gpxFileCombined = GPXJoiner.combine(gpx1, gpx2);
 
             // assert
-            Assert.assertEquals(timeOfTrack1, gpxFileCombined.dateTime());
-            Assert.assertNotEquals(timeOfTrack2, gpxFileCombined.dateTime());
+            assertNotNull(gpxFileCombined);
+            assertThat(gpxFileCombined.time(), is(timeOfTrack1));
+            assertThat(gpxFileCombined.time(), not(timeOfTrack2));
 
-            Assert.assertEquals(nameOfTrack1, gpxFileCombined.trackName());
+            assertThat(gpxFileCombined.trackName(), is(nameOfTrack1));
 
-            Assert.assertEquals(numberOfTrackPointsOfFile1 + numberOfTrackPointsOfFile2, gpxFileCombined.numberOfTrackPoints());
+            assertThat(gpxFileCombined.numberOfTrackPoints(), is(numberOfTrackPointsOfFile1 + numberOfTrackPointsOfFile2));
+
+            assertThat(gpxFileCombined.firstTrackPoint(), is(gpx1.firstTrackPoint()));
+            assertThat(gpxFileCombined.lastTrackPoint(), is(gpx2.lastTrackPoint()));
+        } catch (Exception e) {
+            fail("Unable to combine files.");
+        }
+    }
+
+    @Test
+    public void generateCombinedFileInXML() {
+        // arrange
+        String gpxCombinedOutputLocation = "src/test/resources/out/combined.gpx";
+        GPX expectedCombinedFile = GPXReader.read("src/test/resources/combe-emay.gpx");
+        assertNotNull(expectedCombinedFile);
+
+        // act
+        try {
+            GPXJoiner.combine("src/test/resources/file1.gpx", "src/test/resources/file2.gpx", gpxCombinedOutputLocation);
+            GPX actualCombinedFile = GPXReader.read(gpxCombinedOutputLocation);
+
+            // assert
+            assertNotNull(actualCombinedFile);
+            assertThat(actualCombinedFile.time(), is(expectedCombinedFile.time()));
+            assertThat(actualCombinedFile.trackName(), is(expectedCombinedFile.trackName()));
+            assertThat(actualCombinedFile.numberOfTrackPoints(), is(expectedCombinedFile.numberOfTrackPoints()));
+            assertThat(actualCombinedFile.firstTrackPoint().getEle().doubleValue(), is(expectedCombinedFile.firstTrackPoint().getEle().doubleValue()));
+            assertThat(actualCombinedFile.lastTrackPoint().getEle().doubleValue(), is(expectedCombinedFile.lastTrackPoint().getEle().doubleValue()));
+        } catch (JAXBException e) {
+            e.printStackTrace();
+            fail("Unable to combine files.");
+        }
+    }
+
+    @Test
+    public void combineGPSFilesChronologically() {
+        // arrange
+        GPX gpx1 = GPXReader.read("src/test/resources/simple-track-split-1.gpx");
+        assertNotNull(gpx1);
+        Instant timeOfTrack1 = gpx1.time();
+        String nameOfTrack1 = gpx1.trackName();
+        int numberOfTrackPointsOfFile1 = gpx1.numberOfTrackPoints();
+
+        GPX gpx2 = GPXReader.read("src/test/resources/simple-track-split-2.gpx");
+        assertNotNull(gpx2);
+        Instant timeOfTrack2 = gpx2.time();
+        int numberOfTrackPointsOfFile2 = gpx2.numberOfTrackPoints();
+
+        // act
+        try {
+            // revert the files here: gpx1 is chronologically before gpx2
+            GPX gpxFileCombined = GPXJoiner.combine(gpx2, gpx1);
+
+            // assert
+            assertNotNull(gpxFileCombined);
+            assertThat(gpxFileCombined.time(), is(timeOfTrack1));
+            assertThat(gpxFileCombined.time(), not(timeOfTrack2));
+
+            assertThat(gpxFileCombined.trackName(), is(nameOfTrack1));
+
+            assertThat(gpxFileCombined.numberOfTrackPoints(), is(numberOfTrackPointsOfFile1 + numberOfTrackPointsOfFile2));
+
+            assertThat(gpxFileCombined.firstTrackPoint(), is(gpx1.firstTrackPoint()));
+            assertThat(gpxFileCombined.lastTrackPoint(), is(gpx2.lastTrackPoint()));
         } catch (Exception e) {
             fail("Unable to combine files.");
         }

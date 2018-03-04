@@ -1,4 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE gpx [
+        <!ELEMENT gpx (metadata|trk)*>
+        <!ATTLIST gpx
+                creator CDATA #REQUIRED
+                version CDATA #REQUIRED
+                xmlns CDATA #REQUIRED
+                xmlns:xsi CDATA #REQUIRED
+                xsi:schemaLocation CDATA #REQUIRED
+                xmlns:gpxtpx CDATA #REQUIRED
+                xmlns:gpxx CDATA #REQUIRED>
+        <!ELEMENT metadata (time)*>
+        <!ELEMENT time (#PCDATA)>
+        <!ELEMENT trk (name|trkseg)*>
+        <!ELEMENT name (#PCDATA)>
+        <!ELEMENT trkseg (trkpt)*>
+        <!ELEMENT trkpt (ele|time|extensions)*>
+        <!ATTLIST trkpt
+                lat CDATA #REQUIRED
+                lon CDATA #REQUIRED>
+        <!ELEMENT ele (#PCDATA)>
+        <!ELEMENT extensions (gpxtpx:TrackPointExtension)*>
+        <!ELEMENT gpxtpx:TrackPointExtension (gpxtpx:cad|gpxtpx:atemp)*>
+        <!ELEMENT gpxtpx:cad (#PCDATA)>
+        <!ELEMENT gpxtpx:atemp (#PCDATA)>
+        ]>
 <gpx creator="StravaGPX" version="1.1" xmlns="http://www.topografix.com/GPX/1/1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensionsv3.xsd http://www.garmin.com/xmlschemas/TrackPointExtension/v1 http://www.garmin.com/xmlschemas/TrackPointExtensionv1.xsd http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensionsv3.xsd http://www.garmin.com/xmlschemas/TrackPointExtension/v1 http://www.garmin.com/xmlschemas/TrackPointExtensionv1.xsd" xmlns:gpxtpx="http://www.garmin.com/xmlschemas/TrackPointExtension/v1" xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">
     <metadata>
         <time>2018-02-13T08:18:33Z</time>
