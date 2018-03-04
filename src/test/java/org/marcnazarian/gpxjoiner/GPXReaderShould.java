@@ -1,8 +1,5 @@
-package test.java;
+package org.marcnazarian.gpxjoiner;
 
-import main.java.GPX;
-import main.java.GPXJoiner;
-import main.java.GPXReader;
 import org.junit.Test;
 
 import javax.xml.bind.JAXBException;

@@ -1,7 +1,4 @@
-package main.java;
-
-import main.java.jaxb.GpxType;
-import main.java.jaxb.ObjectFactory;
+package org.marcnazarian.gpxjoiner;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;

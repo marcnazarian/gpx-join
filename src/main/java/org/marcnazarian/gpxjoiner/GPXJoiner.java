@@ -1,6 +1,4 @@
-package main.java;
-
-import main.java.jaxb.GpxType;
+package org.marcnazarian.gpxjoiner;
 
 import javax.xml.bind.*;
 import javax.xml.namespace.QName;

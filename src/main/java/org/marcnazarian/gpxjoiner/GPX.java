@@ -1,7 +1,4 @@
-package main.java;
-
-import main.java.jaxb.GpxType;
-import main.java.jaxb.WptType;
+package org.marcnazarian.gpxjoiner;
 
 import java.time.Instant;
 import java.util.List;
