@@ -3,12 +3,9 @@ package test.java;
 import main.java.GPX;
 import main.java.GPXJoiner;
 import main.java.GPXReader;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 
 import javax.xml.bind.JAXBException;
-import javax.xml.bind.UnmarshalException;
 import java.time.Instant;
 
 import static org.junit.Assert.assertNotNull;
@@ -18,16 +15,13 @@ import static org.hamcrest.CoreMatchers.*;
 
 public class GPXReaderShould {
 
-    @Rule
-    public ExpectedException thrown = ExpectedException.none();
-
     @Test
     public void readGPXFile() {
         // arrange
         Instant expectedTime = Instant.parse("2018-02-13T08:18:33Z");
 
         // act
-        GPX gpx = GPXReader.read("src/test/resources/combe-emay.gpx");
+        GPX gpx = GPXReader.read("src/test/java/resources/combe-emay.gpx");
 
         // assert
         assertNotNull(gpx);
@@ -39,9 +33,8 @@ public class GPXReaderShould {
     @Test
     public void readEmptyGPXFile() {
         // arrange
-
         // act
-        GPX gpx = GPXReader.read("src/test/resources/empty-track.gpx");
+        GPX gpx = GPXReader.read("src/test/java/resources/empty-track.gpx");
 
         // assert
         assertNotNull(gpx);
@@ -56,7 +49,7 @@ public class GPXReaderShould {
         Instant expectedTime = Instant.parse("2018-02-02T08:54:47Z");
 
         // act
-        GPX gpx = GPXReader.read("src/test/resources/simple-track-without-metadata-time.gpx");
+        GPX gpx = GPXReader.read("src/test/java/resources/simple-track-without-metadata-time.gpx");
 
         // assert
         assertNotNull(gpx);
@@ -67,7 +60,7 @@ public class GPXReaderShould {
     public void readFirstTrackPoint() {
         // arrange
         // act
-        GPX gpx = GPXReader.read("src/test/resources/combe-emay.gpx");
+        GPX gpx = GPXReader.read("src/test/java/resources/combe-emay.gpx");
 
         // assert
         assertNotNull(gpx);
@@ -79,7 +72,7 @@ public class GPXReaderShould {
     public void readLastTrackPoint() {
         // arrange
         // act
-        GPX gpx = GPXReader.read("src/test/resources/combe-emay.gpx");
+        GPX gpx = GPXReader.read("src/test/java/resources/combe-emay.gpx");
 
         // assert
         assertNotNull(gpx);
@@ -90,13 +83,13 @@ public class GPXReaderShould {
     @Test
     public void combineTwoSimpleGPSFiles() {
         // arrange
-        GPX gpx1 = GPXReader.read("src/test/resources/simple-track-split-1.gpx");
+        GPX gpx1 = GPXReader.read("src/test/java/resources/simple-track-split-1.gpx");
         assertNotNull(gpx1);
         Instant timeOfTrack1 = gpx1.time();
         String nameOfTrack1 = gpx1.trackName();
         int numberOfTrackPointsOfFile1 = gpx1.numberOfTrackPoints();
 
-        GPX gpx2 = GPXReader.read("src/test/resources/simple-track-split-2.gpx");
+        GPX gpx2 = GPXReader.read("src/test/java/resources/simple-track-split-2.gpx");
         assertNotNull(gpx2);
         Instant timeOfTrack2 = gpx2.time();
         int numberOfTrackPointsOfFile2 = gpx2.numberOfTrackPoints();
@@ -124,13 +117,13 @@ public class GPXReaderShould {
     @Test
     public void combineTwoBigGPSFiles() {
         // arrange
-        GPX gpx1 = GPXReader.read("src/test/resources/file1.gpx");
+        GPX gpx1 = GPXReader.read("src/test/java/resources/file1.gpx");
         assertNotNull(gpx1);
         Instant timeOfTrack1 = gpx1.time();
         String nameOfTrack1 = gpx1.trackName();
         int numberOfTrackPointsOfFile1 = gpx1.numberOfTrackPoints();
 
-        GPX gpx2 = GPXReader.read("src/test/resources/file2.gpx");
+        GPX gpx2 = GPXReader.read("src/test/java/resources/file2.gpx");
         assertNotNull(gpx2);
         Instant timeOfTrack2 = gpx2.time();
         int numberOfTrackPointsOfFile2 = gpx2.numberOfTrackPoints();
@@ -158,13 +151,13 @@ public class GPXReaderShould {
     @Test
     public void generateCombinedFileInXML() {
         // arrange
-        String gpxCombinedOutputLocation = "src/test/resources/out/combined.gpx";
-        GPX expectedCombinedFile = GPXReader.read("src/test/resources/combe-emay.gpx");
+        String gpxCombinedOutputLocation = "src/test/java/resources/out/combined.gpx";
+        GPX expectedCombinedFile = GPXReader.read("src/test/java/resources/combe-emay.gpx");
         assertNotNull(expectedCombinedFile);
 
         // act
         try {
-            GPXJoiner.combine("src/test/resources/file1.gpx", "src/test/resources/file2.gpx", gpxCombinedOutputLocation);
+            GPXJoiner.combine("src/test/java/resources/file1.gpx", "src/test/java/resources/file2.gpx", gpxCombinedOutputLocation);
             GPX actualCombinedFile = GPXReader.read(gpxCombinedOutputLocation);
 
             // assert
@@ -183,13 +176,13 @@ public class GPXReaderShould {
     @Test
     public void combineGPSFilesChronologically() {
         // arrange
-        GPX gpx1 = GPXReader.read("src/test/resources/simple-track-split-1.gpx");
+        GPX gpx1 = GPXReader.read("src/test/java/resources/simple-track-split-1.gpx");
         assertNotNull(gpx1);
         Instant timeOfTrack1 = gpx1.time();
         String nameOfTrack1 = gpx1.trackName();
         int numberOfTrackPointsOfFile1 = gpx1.numberOfTrackPoints();
 
-        GPX gpx2 = GPXReader.read("src/test/resources/simple-track-split-2.gpx");
+        GPX gpx2 = GPXReader.read("src/test/java/resources/simple-track-split-2.gpx");
         assertNotNull(gpx2);
         Instant timeOfTrack2 = gpx2.time();
         int numberOfTrackPointsOfFile2 = gpx2.numberOfTrackPoints();
