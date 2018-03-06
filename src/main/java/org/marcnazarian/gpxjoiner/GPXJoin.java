@@ -4,8 +4,35 @@ import javax.xml.bind.*;
 import javax.xml.namespace.QName;
 import java.io.File;
 
-public class GPXJoiner {
-    
+public class GPXJoin {
+
+    public static void main(String[] args) {
+        if (args.length == 3) {
+            try {
+                String gpxFile1 = args[0];
+                String gpxFile2 = args[1];
+                String outputCombinedGpxFile = args[2];
+
+                combine(gpxFile1, gpxFile2, outputCombinedGpxFile);
+            } catch (JAXBException e) {
+                System.out.println("Unable to combine the GPX file: " + e.getMessage());
+                e.printStackTrace();
+                System.exit(1);
+            } catch (Exception e) {
+                System.out.println("Unable to combine the GPX file. Unexpected exception: " + e.getMessage());
+                e.printStackTrace();
+                System.exit(1);
+            }
+        } else {
+            usage();
+        }
+    }
+
+    private static void usage() {
+        System.out.println("GPXJoin - combine two gpx tracks into a single one.");
+        System.out.println("  Usage: java GPXJoin file1.gpx file2.gpx outputCombinedGpxFile.gpx");
+    }
+
     public static GPX combine(GPX gpx1, GPX gpx2) {
         if (gpx1.time().isBefore(gpx2.time())) {
             gpx1.addTrackPoints(gpx2.trackPoints());

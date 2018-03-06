@@ -93,7 +93,7 @@ public class GPXReaderShould {
 
         // act
         try {
-            GPX gpxFileCombined = GPXJoiner.combine(gpx1, gpx2);
+            GPX gpxFileCombined = GPXJoin.combine(gpx1, gpx2);
 
             // assert
             assertNotNull(gpxFileCombined);
@@ -127,7 +127,7 @@ public class GPXReaderShould {
 
         // act
         try {
-            GPX gpxFileCombined = GPXJoiner.combine(gpx1, gpx2);
+            GPX gpxFileCombined = GPXJoin.combine(gpx1, gpx2);
 
             // assert
             assertNotNull(gpxFileCombined);
@@ -154,7 +154,7 @@ public class GPXReaderShould {
 
         // act
         try {
-            GPXJoiner.combine("src/test/java/resources/file1.gpx", "src/test/java/resources/file2.gpx", gpxCombinedOutputLocation);
+            GPXJoin.combine("src/test/java/resources/file1.gpx", "src/test/java/resources/file2.gpx", gpxCombinedOutputLocation);
             GPX actualCombinedFile = GPXReader.read(gpxCombinedOutputLocation);
 
             // assert
@@ -187,7 +187,7 @@ public class GPXReaderShould {
         // act
         try {
             // revert the files here: gpx1 is chronologically before gpx2
-            GPX gpxFileCombined = GPXJoiner.combine(gpx2, gpx1);
+            GPX gpxFileCombined = GPXJoin.combine(gpx2, gpx1);
 
             // assert
             assertNotNull(gpxFileCombined);
