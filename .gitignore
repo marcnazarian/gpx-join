@@ -3,3 +3,6 @@
 *.iml
 
 target/*
+out/*
+
+src/test/java/resources/out/*

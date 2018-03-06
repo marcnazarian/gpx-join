@@ -18,24 +18,45 @@
     </dependencies>
 
     <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <configuration>
+                        <source>1.8</source>
+                        <target>1.8</target>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
         <plugins>
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>jaxb2-maven-plugin</artifactId>
+                <version>2.2</version>
+                <executions>
+                    <execution>
+                        <id>xjc</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>xjc</goal>
+                        </goals>
+                    </execution>
+                </executions>
                 <configuration>
-                    <source>1.8</source>
-                    <target>1.8</target>
+                    <packageName>org.marcnazarian.gpxjoiner</packageName>
+                    <sources>
+                        <source>src/main/resources/gpx.xsd</source>
+                    </sources>
                 </configuration>
             </plugin>
         </plugins>
     </build>
 
-    <!-- BUILD GENERATE SOURCES
+    <!-- BUILD GENERATE SOURCES in command line:
 
-    /usr/lib/jvm/java-8-openjdk-i386/bin/xjc
-            -p org.marcnazarian.gpxjoiner
-            -d /home/marc/dev/dojos/gpx-join/target/generated-sources/jaxb
-                            /home/marc/dev/dojos/gpx-join/src/main/resources/gpx.xsd
+    xjc -p org.marcnazarian.gpxjoiner -d target/generated-sources/jaxb src/main/resources/gpx.xsd
 
     -->
 
