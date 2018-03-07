@@ -37,7 +37,7 @@
                 <version>2.2</version>
                 <executions>
                     <execution>
-                        <id>xjc</id>
+                        <id>generate-sources-from-xsd-with-xjc</id>
                         <phase>generate-sources</phase>
                         <goals>
                             <goal>xjc</goal>
@@ -45,9 +45,15 @@
                     </execution>
                 </executions>
                 <configuration>
+                    <extension>true</extension>
+                    <arguments>
+                        <argument>-npa</argument>
+                    </arguments>
                     <packageName>org.marcnazarian.gpxjoiner</packageName>
                     <sources>
                         <source>src/main/resources/gpx.xsd</source>
+                        <!--source>src/main/resources/GpxExtensionsv3.xsd</source-->
+                        <source>src/main/resources/TrackPointExtensionv1.xsd</source>
                     </sources>
                 </configuration>
             </plugin>
