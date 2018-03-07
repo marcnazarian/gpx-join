@@ -18,6 +18,13 @@ java -jar target/gpx-join-1.0.0.jar /path/to/file1.gpx /path/to/file2.gpx /path/
 ```
 
 
+### Examples:
+
+Examples of usages and behaviors can be found in unit tests (see src/test/java/org.marcnazarian.gpxjoin folder)
+
+Examples of gpx files can be found in unit tests (see src/test/java/org.marcnazarian.gpxjoin/resources folder)
+
+
 ## Limitations:
 
 Program tested with gpx files from __Strava__ application.
