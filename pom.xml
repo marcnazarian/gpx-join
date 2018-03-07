@@ -6,7 +6,7 @@
 
     <groupId>marcnazarian</groupId>
     <artifactId>gpx-join</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0.0</version>
 
     <dependencies>
         <dependency>
@@ -61,6 +61,20 @@
                         <!--source>src/main/resources/GpxExtensionsv3.xsd</source-->
                         <source>src/main/resources/TrackPointExtensionv1.xsd</source>
                     </sources>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.0.2</version>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <addClasspath>true</addClasspath>
+                            <classpathPrefix>lib/</classpathPrefix>
+                            <mainClass>org.marcnazarian.gpxjoiner.GPXJoin</mainClass>
+                        </manifest>
+                    </archive>
                 </configuration>
             </plugin>
         </plugins>
