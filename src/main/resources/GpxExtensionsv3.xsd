@@ -3,7 +3,7 @@
   elementFormDefault="qualified"
   xmlns="http://www.garmin.com/xmlschemas/GpxExtensions/v3"
   xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-
+                                          
   <xsd:annotation><xsd:documentation>
   This schema defines the Garmin extensions to be used with the GPX 1.1 schema.
   The root elements defined by this schema are intended to be used as child

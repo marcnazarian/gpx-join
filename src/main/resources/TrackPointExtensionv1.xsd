@@ -3,7 +3,7 @@
   elementFormDefault="qualified"
   xmlns="http://www.garmin.com/xmlschemas/TrackPointExtension/v1"
   xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-
+  
   <xsd:annotation><xsd:documentation>
   This schema defines Garmin extensions to be used with the GPX 1.1 schema.
   The root element defined by this schema is intended to be used as a child
