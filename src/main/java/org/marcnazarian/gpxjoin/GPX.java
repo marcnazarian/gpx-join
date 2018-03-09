@@ -1,4 +1,4 @@
-package org.marcnazarian.gpxjoiner;
+package org.marcnazarian.gpxjoin;
 
 import java.time.Instant;
 import java.util.List;

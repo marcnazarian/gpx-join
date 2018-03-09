@@ -55,7 +55,7 @@
                     <arguments>
                         <argument>-npa</argument>
                     </arguments>
-                    <packageName>org.marcnazarian.gpxjoiner</packageName>
+                    <packageName>org.marcnazarian.gpxjoin</packageName>
                     <sources>
                         <source>src/main/resources/gpx.xsd</source>
                         <!--source>src/main/resources/GpxExtensionsv3.xsd</source-->
@@ -72,7 +72,7 @@
                         <manifest>
                             <addClasspath>true</addClasspath>
                             <classpathPrefix>lib/</classpathPrefix>
-                            <mainClass>org.marcnazarian.gpxjoiner.GPXJoin</mainClass>
+                            <mainClass>org.marcnazarian.gpxjoin.GPXJoin</mainClass>
                         </manifest>
                     </archive>
                 </configuration>

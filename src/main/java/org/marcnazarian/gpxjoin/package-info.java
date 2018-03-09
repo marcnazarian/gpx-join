@@ -5,7 +5,7 @@
         },
         elementFormDefault = javax.xml.bind.annotation.XmlNsForm.QUALIFIED)
 
-package org.marcnazarian.gpxjoiner;
+package org.marcnazarian.gpxjoin;
 
 import javax.xml.bind.annotation.XmlNs;
 import javax.xml.bind.annotation.XmlSchema;

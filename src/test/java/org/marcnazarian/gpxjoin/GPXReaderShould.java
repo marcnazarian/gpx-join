@@ -1,4 +1,4 @@
-package org.marcnazarian.gpxjoiner;
+package org.marcnazarian.gpxjoin;
 
 import org.junit.Test;
 
@@ -24,7 +24,7 @@ public class GPXReaderShould {
         assertNotNull(gpx);
         assertThat(gpx.trackName(), is("Combe de l'Emay, en aller retour"));
         assertThat(gpx.time(), is(expectedTime));
-        assertThat(gpx.numberOfTrackPoints(), is(4499));
+        assertThat(gpx.numberOfTrackPoints(), is(4498));
     }
 
     @Test

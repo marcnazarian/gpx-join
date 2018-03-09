@@ -1,4 +1,4 @@
-package org.marcnazarian.gpxjoiner;
+package org.marcnazarian.gpxjoin;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
