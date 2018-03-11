@@ -16,7 +16,7 @@ public class GPXReaderShould {
         Instant expectedTime = Instant.parse("2018-02-13T08:18:33Z");
 
         // act
-        GPX gpx = GPXReader.read("src/test/java/resources/combe-emay.gpx");
+        GPX gpx = GPXReader.read("src/test/resources/combe-emay.gpx");
 
         // assert
         assertNotNull(gpx);
@@ -29,7 +29,7 @@ public class GPXReaderShould {
     public void readEmptyGPXFile() {
         // arrange
         // act
-        GPX gpx = GPXReader.read("src/test/java/resources/empty-track.gpx");
+        GPX gpx = GPXReader.read("src/test/resources/empty-track.gpx");
 
         // assert
         assertNotNull(gpx);
@@ -44,7 +44,7 @@ public class GPXReaderShould {
         Instant expectedTime = Instant.parse("2018-02-02T08:54:47Z");
 
         // act
-        GPX gpx = GPXReader.read("src/test/java/resources/simple-track-without-metadata-time.gpx");
+        GPX gpx = GPXReader.read("src/test/resources/simple-track-without-metadata-time.gpx");
 
         // assert
         assertNotNull(gpx);
@@ -55,7 +55,7 @@ public class GPXReaderShould {
     public void readFirstTrackPoint() {
         // arrange
         // act
-        GPX gpx = GPXReader.read("src/test/java/resources/combe-emay.gpx");
+        GPX gpx = GPXReader.read("src/test/resources/combe-emay.gpx");
 
         // assert
         assertNotNull(gpx);
@@ -67,14 +67,12 @@ public class GPXReaderShould {
     public void readLastTrackPoint() {
         // arrange
         // act
-        GPX gpx = GPXReader.read("src/test/java/resources/combe-emay.gpx");
+        GPX gpx = GPXReader.read("src/test/resources/combe-emay.gpx");
 
         // assert
         assertNotNull(gpx);
         assertThat(gpx.lastTrackPoint().getTime().toString(), is("2018-02-13T15:20:36Z"));
         assertThat(gpx.lastTrackPoint().getEle().doubleValue(), is(1148.0));
     }
-
-
 
 }
