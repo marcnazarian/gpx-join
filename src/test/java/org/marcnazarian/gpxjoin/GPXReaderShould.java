@@ -3,15 +3,17 @@ package org.marcnazarian.gpxjoin;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.math.BigDecimal;
 import java.time.Duration;
 import java.time.Instant;
 
 import static org.junit.Assert.assertNotNull;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.Matchers.closeTo;
 
 public class GPXReaderShould {
+
+    private static final double PERCENTAGE_OF_ERROR_FOR_ELEVATION = 0.7;
 
     private GPX gpxCombeEmay;
 
@@ -121,4 +123,39 @@ public class GPXReaderShould {
         assertThat(gpxCombeEmay.highestAltitude().doubleValue(), is(expectedHighestAltitude));
     }
 
+    @Test
+    public void computeElevationWhenOnlyOneAscent() {
+        // arrange
+        double expectedElevation = 1076; // elevation given by Strava. My feeling is that it should be 2226.4 - 1167.6 = 1058.8 ; so compare with an "error"
+
+        // act
+        GPX gpxColAigleton = GPXReader.read("src/test/resources/col_aigleton.gpx");
+
+        // assert
+        assertThat(gpxColAigleton.elevation(), closeTo(expectedElevation, (expectedElevation * PERCENTAGE_OF_ERROR_FOR_ELEVATION) / 100));
+    }
+
+    @Test
+    public void computeElevationWhenTwoAscent() {
+        // arrange
+        double expectedElevation = 1131; // elevation given by Strava
+
+        // act
+        GPX gpxMoucherotte = GPXReader.read("src/test/resources/moucherotte_et_demi.gpx");
+
+        // assert
+        assertThat(gpxMoucherotte.elevation(), closeTo(expectedElevation, (expectedElevation * PERCENTAGE_OF_ERROR_FOR_ELEVATION) / 100));
+    }
+
+    @Test
+    public void computeElevationWhenMultipleAscent() {
+        // arrange
+        double expectedElevation = 1240; // elevation given by Strava
+
+        // act
+        GPX gpxVanBotte = GPXReader.read("src/test/resources/petit_van_botte.gpx");
+
+        // assert
+        assertThat(gpxVanBotte.elevation(), closeTo(expectedElevation, (expectedElevation * PERCENTAGE_OF_ERROR_FOR_ELEVATION) / 100));
+    }
 }

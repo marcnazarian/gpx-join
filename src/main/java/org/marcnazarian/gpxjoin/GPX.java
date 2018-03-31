@@ -7,9 +7,12 @@ import java.time.Duration;
 import java.time.Instant;
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class GPX {
-    
+
+    private static final double ASCENT_THRESHOLD_FOR_ELEVATION = 1.8;
+
     final GpxType gpxType;
 
     public GPX(GpxType gpxType) {
@@ -82,5 +85,28 @@ public class GPX {
 
     public BigDecimal highestAltitude() {
         return trackPoints().stream().max(Comparator.comparing(WptType::getEle)).get().getEle();
+    }
+
+    public double elevation() {
+        return elevation(ASCENT_THRESHOLD_FOR_ELEVATION);
+    }
+
+    double elevation(double ascentThresholdForElevation) {
+        double elevation = 0.0;
+        double lastAltitudeForElevationComputation = firstTrackPoint().getEle().doubleValue();
+        double previousAltitude = firstTrackPoint().getEle().doubleValue();
+
+        List<BigDecimal> altitudes = trackPoints().stream().map(WptType::getEle).collect(Collectors.toList());
+
+        for (BigDecimal altitude: altitudes) {
+            if (altitude.doubleValue() < previousAltitude) { // is initiating descent
+                if (previousAltitude - lastAltitudeForElevationComputation > ascentThresholdForElevation) {
+                    elevation += altitude.doubleValue() - lastAltitudeForElevationComputation;
+                }
+                lastAltitudeForElevationComputation = altitude.doubleValue();
+            }
+            previousAltitude = altitude.doubleValue();
+        }
+        return elevation;
     }
 }
